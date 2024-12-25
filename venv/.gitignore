@@ -1,0 +1,4 @@
+# parts of venv folder not to be tracked by git
+/lib
+/include
+/scripts
