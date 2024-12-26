@@ -1,7 +1,18 @@
 from rest_framework import serializers
-from .models import Example
+from .models import Commodity, CommodityCategory
 
-class ExampleSerializer(serializers.ModelSerializer):
+        
+class CommoditySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Example
+        model = Commodity
+        fields = '__all__'
+        
+class CommodityCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommodityCategory
+        fields = '__all__'
+    
+class CommodityCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommodityCategory
         fields = '__all__'

@@ -1,7 +1,12 @@
 from rest_framework import viewsets
-from .models import Example
-from .serializers import ExampleSerializer
+from .models import Commodity, CommodityCategory
+from .serializers import CommoditySerializer, CommodityCategorySerializer
 
-class ExampleViewSet(viewsets.ModelViewSet):
-    queryset = Example.objects.all()
-    serializer_class = ExampleSerializer
+class CommodityViewSet(viewsets.ModelViewSet):
+    queryset = Commodity.objects.all()
+    serializer_class = CommoditySerializer
+    
+class CommodityCategoryViewSet(viewsets.ModelViewSet):
+    queryset = CommodityCategory.objects.all()
+    serializer_class = CommodityCategorySerializer
+
