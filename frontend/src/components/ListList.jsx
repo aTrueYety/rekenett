@@ -8,7 +8,6 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import axiosInstance from '../axiosInstance';
-import { useEffect, useRef } from 'react';
 import '../theme/Base.css';
 
 export default function ListList({ loading, lists, setLists }) {

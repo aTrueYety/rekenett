@@ -40,6 +40,7 @@ class Transaction(models.Model):
 class ListTemplate(models.Model):
     name = models.CharField(max_length=100, blank=False, null=False)
     users = models.ManyToManyField(User, blank=True)
+    limit = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name
