@@ -1,48 +1,57 @@
 import React from 'react';
 import Page from '../components/Page';
 import { Box } from '@mui/material';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { FixedSizeList } from 'react-window';
+import TransactionsList from '../components/TransactionList';
+import TransactionHistory from '../components/TransactionHistory';
+import { useState, useEffect } from 'react';
+import axiosInstance from '../axiosInstance';
+import { Typography } from '@mui/material';
 
-function renderRow(props) {
-  const { index, style } = props;
+export default function Account() {
+  const [loading, setLoading] = useState(true);
+  const [transactions, setTransactions] = useState([]);
 
-  return (
-    <ListItem style={style} key={index} component="div" disablePadding>
-      <ListItemButton>
-        <ListItemText primary={`Item ${index + 1}`} />
-      </ListItemButton>
-    </ListItem>
-  );
-}
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await axiosInstance.get('/api/user-transactions/');
+        setTransactions(response.data);
+      } catch (error) {
+        // setError('Failed to fetch transactions');
+        console.error('Failed to fetch transactions', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-const VirtualizedList = 
-    <Box
-      sx={{ width: '100%', height: 400, maxWidth: 360, bgcolor: 'background.paper' }}
-    >
-      <FixedSizeList
-        height={400}
-        itemSize={46}
-        itemCount={200}
-        overscanCount={5}
-      >
-        {renderRow}
-      </FixedSizeList>
-    </Box>
-;
-
-const ExampleComponent = () => {
+    fetchTransactions();
+  }, []);  
+  
   return (
     <Page>
       <Box sx={{ p: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <h1>Du har {56} kryss</h1>
-        Siste konto bevegelser:
-        {VirtualizedList}
+      <Typography variant="h4">
+        Du har {
+          loading 
+            ? '...' 
+            : transactions.reduce(
+              (sum, transaction) => sum + transaction.amount, 0)
+        } kryss
+      </Typography>
+      <Typography variant="h6">
+        Totalt har du krysset for {
+          loading 
+            ? '...' 
+            : transactions
+              .filter(transaction => transaction.amount > 0)
+              .reduce((sum, transaction) => sum + transaction.amount, 0)
+        } kryss
+      </Typography>
+      <Box sx={{ mt: 3, display: 'flex', flexDirection: 'row', gap: 3, flexWrap: 'wrap' }}>
+        <TransactionsList loading={loading} transactions={transactions} />
+        <TransactionHistory loading={loading} transactions={transactions} />
+      </Box>
       </Box>
     </Page>
   );
 };
-
-export default ExampleComponent;

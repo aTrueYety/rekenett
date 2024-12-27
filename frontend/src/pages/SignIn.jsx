@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,6 +18,7 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { FormHelperText } from '@mui/material';
+import { useState } from 'react';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -61,6 +63,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
+  const [error, setError] = useState('');
   // Password visibility
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -79,7 +82,7 @@ export default function SignIn(props) {
 
   const validateInputs = () => {
     const password = document.getElementById('password');
-    const name = document.getElementById('name');
+    const username = document.getElementById('username');
 
     let isValid = true;
 
@@ -92,7 +95,7 @@ export default function SignIn(props) {
       setPasswordErrorMessage('');
     }
 
-    if (!name.value || name.value.length < 1) {
+    if (!username.value || username.value.length < 1) {
       setNameError(true);
       setNameErrorMessage('Name is required.');
       isValid = false;
@@ -104,16 +107,33 @@ export default function SignIn(props) {
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (nameError || passwordError) {
-      event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
     console.log({
-      name: data.get('name'),
+      name: data.get('username'),
       password: data.get('password'),
     });
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+        username: data.get('username'),
+        password: data.get('password'),
+      });
+      localStorage.setItem('access_token', response.data.access);
+      localStorage.setItem('refresh_token', response.data.refresh);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
+      // Redirect to the account page
+      window.location.href = '/';
+    } catch (error) {
+      if (error.response.status === 401) {
+        setError('Invalid username or password.');
+      } else {
+        setError('Something went wrong. Please try again later.');
+      }
+    }
   };
 
   return (
@@ -134,14 +154,14 @@ export default function SignIn(props) {
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
+              <FormLabel htmlFor="username">User name</FormLabel>
               <TextField
-                autoComplete="name"
-                name="name"
+                autoComplete="username"
+                name="username"
                 required
                 fullWidth
-                id="name"
-                placeholder="Jon Snow"
+                id="username"
+                placeholder="JonSnow"
                 error={nameError}
                 helperText={nameErrorMessage}
               />
@@ -174,13 +194,14 @@ export default function SignIn(props) {
               />
               <FormHelperText error>{passwordErrorMessage}</FormHelperText>
             </FormControl>
+            {error && <Typography color="error">{error}</Typography>}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               onClick={validateInputs}
             >
-              Sign up
+              Sign in
             </Button>
           </Box>
           <Divider>
