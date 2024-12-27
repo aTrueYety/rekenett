@@ -176,7 +176,6 @@ export default function Page({ children }) {
           <Divider sx={{paddingTop: 2}}>
             {open ? <ShieldIcon sx={{
               color: 'gray', 
-              height: 0.75, 
               position: 'absolute',
               left: '50%',
               transform: 'translate(-50%, -50%)',
