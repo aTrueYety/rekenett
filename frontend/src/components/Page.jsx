@@ -18,6 +18,11 @@ import { Container } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
+import LocalBarIcon from '@mui/icons-material/LocalBar';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import PaidIcon from '@mui/icons-material/Paid';
+import ShieldIcon from '@mui/icons-material/Shield';
 
 const drawerWidth = 240;
 
@@ -90,7 +95,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function Page( { children } ) {
+const menuItems = [
+  { text: 'Bruker', icon: <AccountCircleIcon />, href: '/user' },
+  { text: 'Konto', icon: <AccountBalanceIcon />, href: '/account' },
+  { text: 'Lister', icon: <FileCopyIcon />, href: '/lists' },
+  { text: 'Sitater', icon: <FormatQuoteIcon />, href: '/quotes' },
+  { text: 'Bar panel', icon: <LocalBarIcon />, href: '/bar_panel' },
+];
+
+const adminMenuItems = [
+  { text: 'Betalinger', icon: <PaidIcon />, href: '/payments' },
+  { text: 'Priser', icon: <RequestQuoteIcon />, href: '/prices' },
+  { text: 'BSF', icon: <Typography fontWeight='bold'>BSF</Typography>, href: '/bsf' },
+];
+
+export default function Page({ children }) {
   const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
@@ -108,7 +127,7 @@ export default function Page( { children } ) {
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
-        <IconButton
+          <IconButton
             color="inherit"
             aria-label="open drawer"
             onClick={open ? handleDrawerClose : handleDrawerOpen}
@@ -145,38 +164,38 @@ export default function Page( { children } ) {
         <Toolbar />
         <Box sx={{ overflow: 'hidden' }}>
           <List>
-          <ListItem disablePadding onClick={() => {window.location.href = '/user'}}>
-              <ListItemButton>
-                <ListItemIcon>
-                  <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Bruker" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding onClick={() => {window.location.href = '/account'}}>
-              <ListItemButton>
-                <ListItemIcon>
-                  <AccountBalanceIcon />
-                </ListItemIcon>
-                <ListItemText primary="Konto" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding onClick={() => {window.location.href = '/lists'}}>
-              <ListItemButton>
-                <ListItemIcon>
-                  <FileCopyIcon />
-                </ListItemIcon>
-                <ListItemText primary="Lister" />
-              </ListItemButton>
-            </ListItem>
+            {menuItems.map((item, index) => (
+              <ListItem key={index} disablePadding onClick={() => { window.location.href = item.href }}>
+                <ListItemButton>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
           </List>
-          <Divider />
+          <Divider sx={{paddingTop: 2}}>
+            {open ? <ShieldIcon sx={{
+              color: 'gray', 
+              height: 0.75, 
+              position: 'absolute',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}/> : null}
+          </Divider>
           <List>
-            {/*Admin pages*/}
+            {adminMenuItems.map((item, index) => (
+              <ListItem key={index} disablePadding onClick={() => { window.location.href = item.href }
+              }>
+                <ListItemButton>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
           </List>
         </Box>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: 8 }}> 
+      <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: 8 }}>
         <Container>
           {children}
         </Container>
