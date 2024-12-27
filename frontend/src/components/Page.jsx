@@ -21,8 +21,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import LocalBarIcon from '@mui/icons-material/LocalBar';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
-import PaidIcon from '@mui/icons-material/Paid';
-import ShieldIcon from '@mui/icons-material/Shield';
+import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 
 const drawerWidth = 240;
 
@@ -104,8 +103,8 @@ const menuItems = [
 ];
 
 const adminMenuItems = [
-  { text: 'Betalinger', icon: <PaidIcon />, href: '/payments' },
-  { text: 'Priser', icon: <RequestQuoteIcon />, href: '/prices' },
+  { text: 'Konto', icon: <AccountBalanceIcon />, href: '/payments' },
+  { text: 'Betalinger', icon: <LocalGroceryStoreIcon />, href: '/prices' },
   { text: 'BSF', icon: <Typography fontWeight='bold'>BSF</Typography>, href: '/bsf' },
 ];
 
