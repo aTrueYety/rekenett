@@ -30,12 +30,13 @@ export default function TransactionList({loading, transactions}) {
       sx={{ 
         textAlign: 'center',
         padding: 2,
+        flexGrow: 1,
       }}
     >
       <Typography>Siste konto bevegelser:</Typography>
       <Box
       sx={{
-        width: 360, 
+        width: '100%', 
         display: 'flex', 
         flexDirection: 'column', 
         alignItems: 'center', 

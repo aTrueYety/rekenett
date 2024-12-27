@@ -174,12 +174,7 @@ export default function Page({ children }) {
             ))}
           </List>
           <Divider sx={{paddingTop: 2}}>
-            {open ? <ShieldIcon sx={{
-              color: 'gray', 
-              position: 'absolute',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}/> : null}
+            <Typography sx={{color: 'gray', textAlign: 'center'}}>Admin</Typography>
           </Divider>
           <List>
             {adminMenuItems.map((item, index) => (
