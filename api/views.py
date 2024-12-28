@@ -1,9 +1,26 @@
 from rest_framework import viewsets
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .models import Commodity, CommodityCategory, Transaction, ListTemplate
-from .serializers import CommoditySerializer, CommodityCategorySerializer, TransactionSerializer, UserListTemplateSerializer
+from .models import Commodity, CommodityCategory, Transaction, ListTemplate, SignupCode
+from .serializers import CommoditySerializer, CommodityCategorySerializer, TransactionSerializer, UserListTemplateSerializer, UserSerializer
+
+class SignUpView(APIView):
+    permission_classes = []
+    
+    def post(self, request):
+        signup_code = request.data.get('signup_code')
+        if not SignupCode.objects.filter(code=signup_code).exists():
+            return Response({'error': 'Invalid signup code'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserTransactionsViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer

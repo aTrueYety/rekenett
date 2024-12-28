@@ -113,10 +113,6 @@ export default function SignIn(props) {
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('username'),
-      password: data.get('password'),
-    });
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/token/', {
         username: data.get('username'),

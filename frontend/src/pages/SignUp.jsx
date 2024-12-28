@@ -17,6 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { FormHelperText } from '@mui/material';
+import axiosInstance from '../axiosInstance';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -72,27 +73,27 @@ export default function SignUp(props) {
   };
 
   // Template
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
+  const [codeError, setcodeError] = React.useState(false);
+  const [codeErrorMessage, setcodeErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const [usernameError, setusernameError] = React.useState(false);
+  const [usernameErrorMessage, setusernameErrorMessage] = React.useState('');
 
   const validateInputs = () => {
-    const email = document.getElementById('email');
+    const code = document.getElementById('code');
     const password = document.getElementById('password');
-    const name = document.getElementById('name');
+    const username = document.getElementById('username');
 
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+    if (!code.value) {
+      setcodeError(true);
+      setcodeErrorMessage('Please enter a valid sign up code.');
       isValid = false;
     } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
+      setcodeError(false);
+      setcodeErrorMessage('');
     }
 
     if (!password.value || password.value.length < 6) {
@@ -104,29 +105,35 @@ export default function SignUp(props) {
       setPasswordErrorMessage('');
     }
 
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('Name is required.');
+    if (!username.value || username.value.length < 1) {
+      setusernameError(true);
+      setusernameErrorMessage('username is required.');
       isValid = false;
     } else {
-      setNameError(false);
-      setNameErrorMessage('');
+      setusernameError(false);
+      setusernameErrorMessage('');
     }
 
     return isValid;
   };
 
-  const handleSubmit = (event) => {
-    if (nameError || emailError || passwordError) {
-      event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (usernameError || codeError || passwordError) {
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    // signup new user with data.get('username'), data.get('code'), data.get('password')
+    try {
+      const response = await axiosInstance.post('http://127.0.0.1:8000/api/signup/', {
+        username: data.get('username'),
+        signup_code: data.get('code'),
+        password: data.get('password'),
+      });
+      window.location.href = '/signin';
+    } catch (error) {
+      console.error(error);
+    }   
   };
 
   return (
@@ -147,30 +154,29 @@ export default function SignUp(props) {
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
+              <FormLabel htmlFor="username">Username</FormLabel>
               <TextField
-                autoComplete="name"
-                name="name"
+                autoComplete="username"
+                name="username"
                 required
                 fullWidth
-                id="name"
+                id="username"
                 placeholder="Jon Snow"
-                error={nameError}
-                helperText={nameErrorMessage}
+                error={usernameError}
+                helperText={usernameErrorMessage}
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="code">Sign up code</FormLabel>
               <TextField
                 required
                 fullWidth
-                id="email"
-                placeholder="your@email.com"
-                name="email"
-                autoComplete="email"
+                id="code"
+                placeholder="ABCDEFG"
+                name="code"
                 variant="outlined"
-                error={emailError}
-                helperText={emailErrorMessage}
+                error={codeError}
+                helperText={codeErrorMessage}
               />
             </FormControl>
             <FormControl>

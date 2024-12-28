@@ -1,10 +1,14 @@
 from django.contrib import admin
-from .models import Commodity, CommodityCategory, Transaction, User, Section, ListTemplate, List, Quote
+from .models import Commodity, CommodityCategory, Transaction, User, Section, ListTemplate, List, Quote, SignupCode
 
 # ---------------------- Users ---------------------- #
 class UserAdmin(admin.ModelAdmin):
     list_display = ['username', 'phone']
 admin.site.register(User, UserAdmin)
+
+class SignupCodeAdmin(admin.ModelAdmin):
+    list_display = ['code']
+admin.site.register(SignupCode, SignupCodeAdmin)
 
 # ---------------------- Sections ---------------------- #
 class SectionAdmin(admin.ModelAdmin):

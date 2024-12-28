@@ -1,5 +1,28 @@
 from rest_framework import serializers
-from .models import Commodity, CommodityCategory, Transaction, List, ListTemplate
+from .models import Commodity, CommodityCategory, Transaction, List, ListTemplate, User, SignupCode
+
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+    signup_code = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'signup_code', 'first_name', 'last_name', 'phone']
+
+    def create(self, validated_data):
+        signup_code = validated_data.pop('signup_code')
+        if not SignupCode.objects.filter(code=signup_code).exists():
+            raise serializers.ValidationError({'signup_code': 'Invalid signup code'})
+
+        user = User(
+            username=validated_data['username'],
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', ''),
+            phone=validated_data.get('phone', ''),
+            password=validated_data['password']
+        )
+        user.save()
+        return user
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:

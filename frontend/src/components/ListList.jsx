@@ -42,10 +42,10 @@ export default function ListList({ loading, lists, setLists }) {
             onChange={(event, value) => handleChange(index, event, value)}
             aria-label={list.name}
           >
-            <ToggleButton value={true} aria-label="Vis meg">
+            <ToggleButton value={true} disabled={list.is_user_in_list} aria-label="Vis meg">
               <VisibilityIcon />
             </ToggleButton>
-            <ToggleButton value={false} aria-label="Ikke vis meg">
+            <ToggleButton value={false} disabled={!list.is_user_in_list} aria-label="Ikke vis meg">
               <VisibilityOffIcon />
             </ToggleButton>
           </ToggleButtonGroup>
