@@ -15,7 +15,7 @@ export default function TransactionList({loading, transactions}) {
         <ListItemButton sx={{ 
             display: 'flex', 
             justifyContent: 'space-between',
-            color: transaction.amount > 0 ? 'var(--positive)' : 'inherit',
+            color: transaction.amount < 0 ? 'var(--positive)' : 'inherit',
         }}>
           <Typography>{transaction.amount}</Typography>
           <Typography>{transaction.description}</Typography>

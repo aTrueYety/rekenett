@@ -35,8 +35,7 @@ export default function Account() {
           Du har {
             loading
               ? '...'
-              : transactions.reduce(
-                (sum, transaction) => sum + transaction.amount, 0)
+              : transactions.reduce((sum, transaction) => sum - transaction.amount, 0)
           } kryss
         </Typography>
         <Typography variant="h6">
