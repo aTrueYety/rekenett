@@ -25,6 +25,16 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class TransactionSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = ['id', 'amount', 'date', 'username']
+    class Meta:
+        model = Transaction
+        fields = '__all__'
+        
+class UserTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = '__all__'

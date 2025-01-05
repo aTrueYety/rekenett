@@ -12,19 +12,21 @@ export default function Account() {
   const [loading, setLoading] = useState(true);
   const [transactions, setTransactions] = useState([]);
 
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        const response = await axiosInstance.get('/api/user-transactions/');
-        setTransactions(response.data);
-      } catch (error) {
-        // setError('Failed to fetch transactions');
-        console.error('Failed to fetch transactions', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTransactions = async (amount=30) => {
+    console.log('a'+amount);
+    try {
+      const response = await axiosInstance.get('/api/user-transactions/');
+      const sortedTransactions = response.data.sort((b, a) => new Date(a.date) - new Date(b.date));
+      setTransactions(sortedTransactions);
+    } catch (error) {
+      // setError('Failed to fetch transactions');
+      console.error('Failed to fetch transactions', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTransactions();
   }, []);
 
@@ -48,7 +50,7 @@ export default function Account() {
           } kryss
         </Typography>
         <Box sx={{ mt: 3, width: '100%', display: 'flex', flexDirection: 'row', gap: 3, flexWrap: 'wrap' }}>
-          <TransactionsList loading={loading} transactions={transactions} />
+          <TransactionsList sx={{flexGrow: 1}} loading={loading} transactions={transactions} />
           <TransactionHistory loading={loading} transactions={transactions} />
         </Box>
         <Card

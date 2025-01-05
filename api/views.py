@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .models import Commodity, CommodityCategory, Transaction, ListTemplate, SignupCode
-from .serializers import CommoditySerializer, CommodityCategorySerializer, TransactionSerializer, UserListTemplateSerializer, UserSerializer
+from .serializers import CommoditySerializer, CommodityCategorySerializer, TransactionSerializer, UserTransactionSerializer, UserListTemplateSerializer, UserSerializer
 
 class SignUpView(APIView):
     permission_classes = []
@@ -22,8 +22,30 @@ class SignUpView(APIView):
         print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UserTransactionsViewSet(viewsets.ModelViewSet):
+class TransactionsViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
+    permission_classes = [IsAdminUser]
+    
+    def get_queryset(self):
+        return Transaction.objects.all()
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Get the 'limit' query parameter from the request
+        limit = request.query_params.get('limit', None)
+        if limit is not None:
+            queryset = queryset[:int(limit)]
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            return self.get_paginated_response(page)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+class UserTransactionsViewSet(viewsets.ModelViewSet):
+    serializer_class = UserTransactionSerializer
 
     def get_queryset(self):
         return Transaction.objects.filter(user=self.request.user)

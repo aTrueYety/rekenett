@@ -103,8 +103,8 @@ const menuItems = [
 ];
 
 const adminMenuItems = [
-  { text: 'Konto', icon: <AccountBalanceIcon />, href: '/payments' },
-  { text: 'Betalinger', icon: <LocalGroceryStoreIcon />, href: '/prices' },
+  { text: 'Transaksjoner', icon: <AccountBalanceIcon />, href: '/Transactions' },
+  { text: 'Priser', icon: <LocalGroceryStoreIcon />, href: '/prices' },
   { text: 'BSF', icon: <Typography fontWeight='bold'>BSF</Typography>, href: '/bsf' },
 ];
 

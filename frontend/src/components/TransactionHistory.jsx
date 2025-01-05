@@ -8,7 +8,9 @@ import '../theme/Base.css';
 export default function TransactionHistory({ loading, transactions }) {
   console.log('transactions', transactions);
   const history_per_day = new Map();
-  transactions.forEach(transaction => {
+  transactions
+    .filter(transaction => transaction.amount > 0)
+    .forEach(transaction => {
     const date = format(new Date(transaction.date), 'dd/mm/yy');
     if (history_per_day.has(date)) {
       history_per_day.set(date, history_per_day.get(date) + transaction.amount);
