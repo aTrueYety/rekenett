@@ -22,6 +22,7 @@ import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import LocalBarIcon from '@mui/icons-material/LocalBar';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
+import { useEffect } from 'react';
 
 const drawerWidth = 240;
 
@@ -109,7 +110,12 @@ const adminMenuItems = [
 ];
 
 export default function Page({ children }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(localStorage.getItem('openState') === 'true' || false);
+
+  useEffect(() => {
+    // Save the state to localStorage whenever it changes
+    localStorage.setItem('openState', open);
+  }, [open]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
