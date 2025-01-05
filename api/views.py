@@ -31,6 +31,9 @@ class TransactionsViewSet(viewsets.ModelViewSet):
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        
+        # Sort the queryset by the 'date' field in descending order
+        queryset = queryset.order_by('-date')
 
         # Get the 'limit' query parameter from the request
         limit = request.query_params.get('limit', None)
