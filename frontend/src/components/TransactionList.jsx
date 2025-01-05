@@ -41,7 +41,7 @@ export default function TransactionList({ loading, transactions, includeUser = f
           {includeUser && <Typography width='25%'>{transaction.username}</Typography>}
           <Typography width={includeUser ? '15%' : '23%'}>{transaction.amount}</Typography>
           <Typography width={includeUser ? '35%' : '43%'}>{transaction.description}</Typography>
-          <Typography width={includeUser ? '25%' : '33%'}>{formattedDate}</Typography>
+          <Typography>{formattedDate}</Typography>
         </ListItemButton>
       </ListItem>
     );
