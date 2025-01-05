@@ -8,7 +8,9 @@
   --black: rgb(0, 0, 0);
   --white: rgb(255, 255, 255);
   --positive: rgb(0, 190, 0);
+  --positive-slight: rgba(0, 190, 0, 0.05);
   --negative: rgb(190, 0, 0);
+  --negative-slight: rgba(190, 0, 0, 0.05);
   --round: 0.5rem;
   --rounder: 1rem;
 }
